@@ -3,7 +3,7 @@
         const url = new URL(request.url);
 
         if (url.pathname === "/" || url.pathname === "/index.html") {
-          return fetch("https://lietime.github.io/goflie-admin/");
+          return fetch("https://gofli-io.github.io/lietime/");
         }
 
         if (url.pathname === "/api/list") {
