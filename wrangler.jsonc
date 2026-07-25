@@ -1,0 +1,13 @@
+{
+  "name": "goflie-admin",
+  "main": "worker.js",
+  "compatibility_date": "2026-07-25",
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "goflie",
+      "database_id": "7df0cc76-0a3c-4eaf-a3b5-f2dc00b7f8e6"
+    }
+  ]
+}
