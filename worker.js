@@ -54,6 +54,9 @@
           ).bind(slug).all();
 
           if (results.length) {
+           await env.DB.prepare(
+  "UPDATE links SET clicks = clicks + 1 WHERE slug = ?"
+).bind(slug).run();
             return Response.redirect(results[0].original_url, 302);
           }
         }
