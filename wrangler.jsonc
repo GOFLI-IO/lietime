@@ -1,3 +1,5 @@
+// wrangler.jsonc
+"name": "goflie-admin-v1",
 {
   "name": "goflie-admin",
   "main": "worker.js",
