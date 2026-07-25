@@ -1,15 +1,13 @@
-// wrangler.jsonc
-"name": "goflie-admin-v1",
 {
-  "name": "goflie-admin",
+  "name": "goflie-admin-v1",
   "main": "worker.js",
   "compatibility_date": "2026-07-25",
 
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "goflie",
-      "database_id": "7df0cc76-0a3c-4eaf-a3b5-f2dc00b7f8e6"
+      "database_name": "goflie-me",
+      "database_id": "1306576f-32d6-45c7-8f09-48eb4d07cfa2"
     }
   ]
 }
