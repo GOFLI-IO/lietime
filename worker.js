@@ -15,14 +15,15 @@
 
         if (url.pathname === "/api/create" && request.method === "POST") {
           const body = await request.json();
-          await env.DB.prepare(
-            "INSERT INTO links (slug, original_url, title, created_at) VALUES (?, ?, ?, ?)"
-          ).bind(
-            body.slug,
-            body.url,
-            body.title || "",
-            Date.now()
-          ).run();
+     await env.DB.prepare(
+  "INSERT INTO links (slug, original_url, title, created_at, clicks) VALUES (?, ?, ?, ?, ?)"
+).bind(
+  body.slug,
+  body.url,
+  body.title || "",
+  Date.now(),
+  0
+).run();
           return Response.json({ success: true });
         }
 
