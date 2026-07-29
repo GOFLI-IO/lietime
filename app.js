@@ -13,11 +13,11 @@ async function loadLinks() {
         <tr>
           <td><a href="/${item.slug}" target="_blank">${item.slug}</a></td>
           <td><a href="${item.original_url}" target="_blank">${item.original_url}</a></td>
-          <td><strong id="clicks-${item.slug}">${item.clicks || 0}</strong></td>
+          <td><strong id="clicks-${item.slug}" style="color: #10B981;">${item.clicks || 0}</strong></td>
           <td>
-            <button onclick="deleteLink('${item.slug}')">
-              Delete
-            </button>
+            <button onclick="copyLink('${item.slug}')">Copy</button>
+            <button onclick="editLink('${item.slug}')">Edit</button>
+            <button onclick="deleteLink('${item.slug}')">Delete</button>
           </td>
         </tr>`;
     });
@@ -37,10 +37,10 @@ async function loadLiveClicks() {
         const currentClicks = item.clicks || 0;
         if (clickEl.innerText != currentClicks) {
           clickEl.innerText = currentClicks;
-          clickEl.style.color = "#10B981";
+          clickEl.style.transform = "scale(1.2)";
           setTimeout(() => {
-            clickEl.style.color = "";
-          }, 1000);
+            clickEl.style.transform = "scale(1)";
+          }, 500);
         }
       }
     });
@@ -58,9 +58,7 @@ async function createLink() {
 
   const res = await fetch(API + "/create", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ slug, url })
   });
 
@@ -72,6 +70,12 @@ async function createLink() {
   } else {
     alert(data.error || "Error creating link");
   }
+}
+
+function copyLink(slug) {
+  const fullUrl = window.location.origin + "/" + slug;
+  navigator.clipboard.writeText(fullUrl);
+  alert("Copied: " + fullUrl);
 }
 
 async function deleteLink(slug) {
