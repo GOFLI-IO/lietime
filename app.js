@@ -1,53 +1,91 @@
 const API = "/api";
 
 async function loadLinks() {
+  try {
     const res = await fetch(API + "/list");
     const data = await res.json();
 
-    const tbody = document.getElementById("links");
+    const tbody = document.getElementById("list");
     tbody.innerHTML = "";
 
     data.forEach(item => {
-        tbody.innerHTML += `
+      tbody.innerHTML += `
         <tr>
-            <td>${item.slug}</td>
-            <td>${item.original_url}</td>
-            <td>
-                <button onclick="deleteLink('${item.slug}')">
-                    Delete
-                </button>
-            </td>
+          <td><a href="/${item.slug}" target="_blank">${item.slug}</a></td>
+          <td><a href="${item.original_url}" target="_blank">${item.original_url}</a></td>
+          <td><strong id="clicks-${item.slug}">${item.clicks || 0}</strong></td>
+          <td>
+            <button onclick="deleteLink('${item.slug}')">
+              Delete
+            </button>
+          </td>
         </tr>`;
     });
+  } catch (e) {
+    console.error("Error loading links:", e);
+  }
+}
+
+async function loadLiveClicks() {
+  try {
+    const res = await fetch(API + "/list");
+    const data = await res.json();
+    
+    data.forEach(item => {
+      const clickEl = document.getElementById(`clicks-${item.slug}`);
+      if (clickEl) {
+        const currentClicks = item.clicks || 0;
+        if (clickEl.innerText != currentClicks) {
+          clickEl.innerText = currentClicks;
+          clickEl.style.color = "#10B981";
+          setTimeout(() => {
+            clickEl.style.color = "";
+          }, 1000);
+        }
+      }
+    });
+  } catch (e) {}
 }
 
 async function createLink() {
-    const slug = document.getElementById("slug").value;
-    const url = document.getElementById("url").value;
+  const slug = document.getElementById("slug").value.trim();
+  const url = document.getElementById("url").value.trim();
 
-    await fetch(API + "/create", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            slug,
-            url
-        })
-    });
+  if (!slug || !url) {
+    alert("សូមបំពេញ Slug និង URL!");
+    return;
+  }
 
+  const res = await fetch(API + "/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ slug, url })
+  });
+
+  const data = await res.json();
+  if (data.success) {
     document.getElementById("slug").value = "";
     document.getElementById("url").value = "";
-
     loadLinks();
+  } else {
+    alert(data.error || "Error creating link");
+  }
 }
 
 async function deleteLink(slug) {
-    await fetch(API + "/delete/" + slug, {
-        method: "DELETE"
-    });
-
-    loadLinks();
+  if (!confirm(`តើអ្នកពិតជាចង់លុប ${slug} មែនទេ?`)) return;
+  await fetch(API + "/delete/" + slug);
+  loadLinks();
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const createBtn = document.getElementById("createBtn");
+  if (createBtn) {
+    createBtn.addEventListener("click", createLink);
+  }
+});
+
 loadLinks();
+setInterval(loadLiveClicks, 3000);
