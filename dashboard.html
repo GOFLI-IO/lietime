@@ -7,29 +7,28 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="container">
+  <div class="container">
     <h1>GoFlie Admin Dashboard</h1>
-
+    
     <div class="card">
-        <input id="slug" type="text" placeholder="Slug">
-        <input id="url" type="text" placeholder="Original URL">
-        <button id="createBtn">Create</button>
+      <input id="slug" type="text" placeholder="Slug">
+      <input id="url" type="text" placeholder="Original URL">
+      <button id="createBtn">Create</button>
     </div>
 
     <table>
-        <thead>
-            <tr>
-                <th>Slug</th>
-                <th>Original URL</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="list"></tbody>
+      <thead>
+        <tr>
+          <th>Slug</th>
+          <th>Original URL</th>
+          <th>Clicks 🔴 Live</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
     </table>
-</div>
+  </div>
 
-<script src="app.js"></script>
-
+  <script src="app.js"></script>
 </body>
 </html>
