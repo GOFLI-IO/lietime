@@ -4,92 +4,299 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoFlie Admin</title>
+
 <style>
-body{margin:0;padding:30px;background:#111;color:#fff;font-family:Arial,sans-serif;max-width:1000px;margin:auto}
-h2{text-align:center}
-input{width:100%;padding:12px;margin:10px 0;background:#222;color:#fff;border:1px solid #555;border-radius:5px;box-sizing:border-box}
-button{border:none;padding:10px 18px;color:#fff;cursor:pointer;border-radius:5px;margin-right:5px}
-.create{background:#00c853}.copy{background:#2962ff}.edit{background:#ff9800}.delete{background:#d50000}
-table{width:100%;border-collapse:collapse;margin-top:20px}
-th,td{border:1px solid #333;padding:10px}th{background:#222}
-a{color:#00e5ff;text-decoration:none}
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:30px;
+    background:#111;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    max-width:1100px;
+    margin:auto;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    background:#222;
+    color:#fff;
+    border:1px solid #444;
+    border-radius:6px;
+}
+
+button{
+    border:none;
+    padding:10px 16px;
+    color:#fff;
+    cursor:pointer;
+    border-radius:5px;
+    margin:2px;
+    transition:.2s;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.create{background:#00c853;}
+.copy{background:#2962ff;}
+.edit{background:#ff9800;}
+.delete{background:#d50000;}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    border:1px solid #333;
+    padding:10px;
+    text-align:left;
+    vertical-align:middle;
+}
+
+th{
+    background:#222;
+}
+
+td.url{
+    max-width:500px;
+    word-break:break-all;
+}
+
+a{
+    color:#00e5ff;
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:768px){
+
+table{
+    display:block;
+    overflow:auto;
+}
+
+body{
+    padding:15px;
+}
+
+button{
+    width:100%;
+    margin-top:5px;
+}
+
+}
 </style>
+
 </head>
+
 <body>
+
 <h2>GoFlie Admin Dashboard</h2>
 
 <input id="url" placeholder="https://example.com">
-<button class="create" onclick="create()">Create</button>
+
+<button class="create" onclick="create()">
+Create Link
+</button>
 
 <table>
+
 <thead>
-<tr><th>Slug</th><th>URL</th><th>Clichs</th><th>Action</th></tr>
+
+<tr>
+<th>Slug</th>
+<th>URL</th>
+<th>Clicks</th>
+<th>Action</th>
+</tr>
+
 </thead>
-<tbody id="list"></tbody>
+
+<tbody id="list">
+
+</tbody>
+
 </table>
 
 <script>
+
 const API=window.location.origin;
 
 function randomSlug(length=6){
- const chars="abcdefghijklmnopqrstuvwxyz0123456789";
- let r="";
- for(let i=0;i<length;i++) r+=chars[Math.floor(Math.random()*chars.length)];
- return r;
+
+const chars="abcdefghijklmnopqrstuvwxyz0123456789";
+
+let result="";
+
+for(let i=0;i<length;i++){
+
+result+=chars[Math.floor(Math.random()*chars.length)];
+
+}
+
+return result;
+
 }
 
 async function load(){
- const res=await fetch(API+"/api/list");
- const data=await res.json();
- document.getElementById("list").innerHTML=data.map(x=>`
- <tr>
-   <td>${x.slug}</td>
-   <td><a href="${x.original_url}" target="_blank">${x.original_url}</a></td>
-   <td>
-     <button class="copy" onclick="copyLink('${x.slug}')">Copy</button>
-     <button class="edit" onclick="editLink('${x.slug}', '${x.original_url}', '${x.title||""}')">Edit</button>
-     <button class="delete" onclick="removeLink('${x.slug}')">Delete</button>
-   </td>
- </tr>`).join("");
+
+const res=await fetch(API+"/api/list");
+
+const data=await res.json();
+
+document.getElementById("list").innerHTML=data.map(x=>`
+
+<tr>
+
+<td>${x.slug}</td>
+
+<td class="url">
+<a href="${x.original_url}" target="_blank">
+${x.original_url}
+</a>
+</td>
+
+<td style="text-align:center">
+${x.clicks ?? 0}
+</td>
+
+<td>
+
+<button class="copy"
+onclick="copyLink('${x.slug}')">
+Copy
+</button>
+
+<button class="edit"
+onclick="editLink('${x.slug}','${x.original_url}','${x.title||""}')">
+Edit
+</button>
+
+<button class="delete"
+onclick="removeLink('${x.slug}')">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`).join("");
+
 }
 
 async function create(){
- const url=document.getElementById("url").value.trim();
- if(!url){alert("Please enter URL");return;}
- await fetch(API+"/api/create",{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({slug:randomSlug(),url:url})
- });
- document.getElementById("url").value="";
- load();
+
+const url=document.getElementById("url").value.trim();
+
+if(!url){
+
+alert("Please enter URL");
+
+return;
+
+}
+
+await fetch(API+"/api/create",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+slug:randomSlug(),
+
+url:url
+
+})
+
+});
+
+document.getElementById("url").value="";
+
+load();
+
 }
 
 async function editLink(slug,url,title){
- const newUrl=prompt("Original URL",url);
- if(newUrl===null) return;
- const newTitle=prompt("Title",title||"");
- await fetch(API+"/api/update",{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({slug:slug,url:newUrl,title:newTitle})
- });
- load();
+
+const newUrl=prompt("Original URL",url);
+
+if(newUrl===null)return;
+
+const newTitle=prompt("Title",title);
+
+await fetch(API+"/api/update",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+slug:slug,
+
+url:newUrl,
+
+title:newTitle
+
+})
+
+});
+
+load();
+
 }
 
 async function removeLink(slug){
- if(!confirm("Delete "+slug+" ?")) return;
- await fetch(API+"/api/delete/"+slug);
- load();
+
+if(!confirm("Delete "+slug+" ?")) return;
+
+await fetch(API+"/api/delete/"+slug);
+
+load();
+
 }
 
 function copyLink(slug){
- const link=location.origin+"/"+slug;
- navigator.clipboard.writeText(link);
- alert("Copied:\n"+link);
+
+const link=location.origin+"/"+slug;
+
+navigator.clipboard.writeText(link);
+
+alert("Copied:\n"+link);
+
 }
 
 load();
+
 </script>
+
 </body>
 </html>
