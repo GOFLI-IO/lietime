@@ -1,61 +1,18 @@
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#111;
-    color:#fff;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed; /* ជួយទប់ទំហំ Column មិនឱ្យរីកធំជ្រុល */
 }
 
-.container{
-    width:900px;
-    margin:30px auto;
+th, td {
+  border: 1px solid #444;
+  padding: 10px;
+  text-align: left;
+  word-break: break-all;      /* បង្ខំឱ្យ URL វែងបត់ចុះបន្ទាត់ក្នុងប្រអប់ */
+  overflow-wrap: break-word;
 }
 
-h1{
-    text-align:center;
-}
-
-.card{
-    margin:20px 0;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin:6px 0;
-    font-size:16px;
-    border:1px solid #444;
-    background:#222;
-    color:#fff;
-    border-radius:6px;
-    box-sizing:border-box;
-}
-
-button{
-    padding:12px 24px;
-    background:#00c853;
-    color:#fff;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    margin-top:8px;
-}
-
-button:hover{
-    background:#00b248;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-
-th,td{
-    border:1px solid #444;
-    padding:10px;
-    text-align:left;
-}
-
-th{
-    background:#222;
+th {
+  background: #222;
 }
