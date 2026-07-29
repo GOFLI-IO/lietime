@@ -16,7 +16,6 @@ async function loadLinks() {
           <td><strong id="clicks-${item.slug}" style="color: #10B981;">${item.clicks || 0}</strong></td>
           <td>
             <button onclick="copyLink('${item.slug}')">Copy</button>
-            <button onclick="editLink('${item.slug}')">Edit</button>
             <button onclick="deleteLink('${item.slug}')">Delete</button>
           </td>
         </tr>`;
